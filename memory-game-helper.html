@@ -1,0 +1,474 @@
+<html>
+	<head>
+	
+		<title>My Singing Monsters Memory Game Helper</title>
+		<meta charset="utf-8">
+
+		<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+		<meta name="viewport" content="width=800">
+		
+	</head>
+	
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<style>
+		
+		html {
+			background-color: #181a1b;
+			color: #e8e6e3;
+			font-size: 1em;
+			font-family:sans-serif;
+			-webkit-text-size-adjust:100%;
+			-ms-text-size-adjust:100%;
+		}
+		body {
+			background-color: #181a1b;
+		}
+		#main {
+			min-width: 800px;
+			width: 800px;
+			min-height: 600px;
+			margin: auto;
+		}
+		.row.filter-types {
+			margin-top: 1em;
+			margin-bottom: 1em;
+		}
+		.row.filter-grid {
+			margin-bottom: 1em;
+		}
+		.row.characters {
+			margin-top: 1em;
+		}
+		.character {
+			width: 80px;
+			height: 80px;
+			display: inline-block;
+			cursor: pointer;
+		}
+		.character.selected {
+			outline: 3px solid rgb(140, 130, 115);
+		}
+		.character.hide {
+			display: none;
+		}
+		.row {
+			display: block;
+			min-width: 800px;
+			width: 800px;
+			max-width: 800px;
+		}
+		.cell {
+			min-width: 80px;
+			max-width: 80px;
+			width: 80px;
+			min-height: 80px;
+			max-height: 80px;
+			height: 80px;
+			outline: 1px solid rgb(140, 130, 115);
+			display: inline-block;
+			background-color: rgb(43, 47, 49);
+			background-size: 80px 80px;
+			background-repeat: no-repeat;
+		}
+		.cell.no-outline {
+			outline: none;
+			background-color: #181a1b;
+		}
+		.cell.match {
+			background-color: limegreen;
+		}
+		.cell.monster {
+			cursor: pointer;
+		}
+		input[type=radio][name=filter-type] {
+			margin-right: 1em;
+		}
+		#filter-island {
+			margin-left: .5em;
+		}
+		span.lvl {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 70px;
+			min-height: 45px;
+			margin: 0 5px;
+			outline: 1px solid rgb(140, 130, 115);
+			text-align: center;
+			cursor: pointer;
+			border-radius: 15px;
+		}
+		span.lvl:hover {
+			background-color: rgb(43, 47, 49);
+		}
+		.filter-grid.above span {
+			width: 145px;
+		}
+		input[type=text] {
+			margin-left: 1em;
+		}
+		#help {
+			display: inline-flex;
+			justify-content: center;
+			color: red;
+			cursor: pointer;
+			width: 42px;
+		}
+		#help-box {
+			display: block;
+			position: fixed;
+			left: 15%;
+			top: 15%;
+			width: 70%;
+			height: 70%;
+			outline: 5px solid rgb(140, 130, 115);
+			background-color: #181a1b;
+			border-radius: 1.5em;
+		}
+		#help-box h2, #help-box ol {
+			margin: 2em;
+		}
+		#help-box-out {
+			display: none;
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+		}
+		#help-close {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			right: -25px;
+			top: -25px;
+			width: 50px;
+			height: 50px;
+			color: red;
+			font-size: xx-large;
+			font-weight: bold;
+			outline: 5px solid rgb(140, 130, 115);
+			background-color: #181a1b;
+			border-radius: 25px;
+			cursor: pointer;
+		}
+		#help-close:hover {
+			background-color: rgb(43, 47, 49);
+		}
+		footer {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+		}
+		footer p {
+			margin: 2em;
+		}
+	</style>
+	<body>
+		<div id="main">
+			<h1>My Singing Monsters Memory Game Helper v4.1.0<span id="help" title="Help">?</span></h1>
+			<div class='row filter-grid above'>
+				<span onclick='gridLevel(0)' class='lvl grid-0'>Reset</span>
+				<span onclick='gridLevel(10)' class='lvl grid-10'>Diamond Sm</span>
+				<span onclick='gridLevel(11)' class='lvl grid-11'>Diamond Md</span>
+				<span onclick='gridLevel(12)' class='lvl grid-12'>Diamond Lg</span>
+			</div><div class='row filter-grid'>
+				<p>
+					<span onclick='gridLevel(1)' class='lvl grid-1'>1</span><span onclick='gridLevel(2)' class='lvl grid-2'>2</span><span onclick='gridLevel(3)' class='lvl grid-3'>3</span><span onclick='gridLevel(4)' class='lvl grid-4'>4</span><span onclick='gridLevel(5)' class='lvl grid-5'>5</span><span onclick='gridLevel(6)' class='lvl grid-6'>6</span><span onclick='gridLevel(7)' class='lvl grid-7'>7</span><span onclick='gridLevel(8)' class='lvl grid-8'>8</span><span onclick='gridLevel(9)' class='lvl grid-9'>9</span>
+				</p>
+			</div>
+			<div class='row'>
+				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
+			</div><div class='row'>
+				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
+			</div><div class='row'>
+				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
+			</div><div class='row'>
+				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
+			</div><div class='row'>
+				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
+			</div><div class='row'>
+				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
+			</div>
+			<div class='row filter-types'>
+				<label for="filter-all">All</label><input type="radio" id="filter-all" name="filter-type" value="All" checked>
+				<label for="filter-common">Common</label><input type="radio" id="filter-common" name="filter-type" value="Common">
+				<label for="filter-rare">Rare</label><input type="radio" id="filter-rare" name="filter-type" value="Rare">
+				<label for="filter-epic">Epic</label><input type="radio" id="filter-epic" name="filter-type" value="Epic">
+				<label for="filter-island">Island</label><select id="filter-island">
+					<option value="All" selected>All</option>
+				</select>
+			</div><div class='row filter-search'>
+				<label for="filter">Search</label><input type="text" id="filter">
+			</div><div class='row characters'>
+			</div>
+		</div>
+		<div id="help-box-out">
+			<div id="help-box">
+				<h2>How to use this tool</h2>
+				<ol>
+					<li><p>Select the desired level by clicking the buttons above the grid</p></li>
+					<li><p>Select the desired icon by clicking the pictures below the grid (filter with inputs)</p></li>
+					<li><p>Place the icon on the grid by clicking on a grid cell (remove icon by clicking again)</p></li>
+					<li><p>If a match is found it will be highlighted until another icon is placed</p></li>
+					<li><p>Enjoy!</p></li>
+				</ol>
+				<footer>
+					<p>My Singing Monsters is a game franchise by Big Blue Bubble. All images and graphics used in this tool belong to their respective owners.</p>
+				</footer>
+				<span id="help-close">X</span>
+			</div>
+		</div>
+		<script src="monsters.js?<?php echo filemtime("monsters.js") ?>"></script>
+		<script>
+			var gridLevels = [
+				{
+					"level":0,
+					"grid": [
+						1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1
+					],
+				},
+				{
+					"level":1,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,1,0,1,0,0,0,
+						0,0,0,0,1,0,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0
+					],
+				},
+				{
+					"level":2,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,1,0,0,1,0,0,0,
+						0,0,0,0,0,1,0,0,0,0,
+						0,0,0,0,1,0,0,0,0,0,
+						0,0,0,1,0,0,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0
+					],
+				},
+				{
+					"level":3,
+					"grid": [
+						0,0,0,0,0,0,0,1,1,0,
+						0,0,0,0,1,1,1,0,0,0,
+						0,0,1,1,0,0,0,0,0,0,
+						0,0,0,0,1,1,1,0,0,0,
+						0,0,0,0,0,0,0,1,1,0,
+						0,0,0,0,0,0,0,0,0,0
+					],
+				},
+				{
+					"level":10,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,1,1,1,0,0,0,
+						0,0,0,1,1,1,1,1,0,0,
+						0,0,0,0,1,1,1,0,0,0,
+						0,0,0,0,0,1,0,0,0,0
+					],
+				},
+				{
+					"level":4,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,1,0,0,0,1,0,0,
+						0,0,1,1,0,0,1,1,0,0,
+						0,0,0,1,0,0,0,1,0,0,
+						0,0,0,1,0,0,0,1,0,0,
+						0,0,1,1,1,0,1,1,1,0
+					],
+				},
+				{
+					"level":5,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,1,0,0,0,0,0,1,0,
+						0,0,1,1,1,1,1,1,1,0,
+						0,0,1,1,1,1,1,1,1,0,
+						0,0,1,0,0,0,0,0,1,0,
+						0,0,0,0,0,0,0,0,0,0
+					],
+				},
+				{
+					"level":11,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,1,1,1,1,1,0,0,
+						0,0,1,1,1,0,1,1,1,0,
+						0,0,0,1,1,1,1,1,0,0,
+						0,0,0,0,1,1,1,0,0,0,
+						0,0,0,0,0,1,0,0,0,0
+					],
+				},
+				{
+					"level":6,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,1,1,1,1,1,0,0,
+						0,0,1,1,1,0,1,1,1,0,
+						0,1,1,0,0,0,0,0,1,1,
+						0,1,0,0,0,0,0,0,0,1,
+						0,1,0,0,0,1,0,0,0,1
+					],
+				},
+				{
+					"level":7,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,
+						1,1,1,1,1,1,1,1,1,1,
+						0,0,1,1,1,1,1,1,0,0,
+						0,0,1,1,1,1,1,1,0,0
+					],
+				},
+				{
+					"level":8,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,
+						1,0,0,0,0,0,0,0,0,1,
+						1,0,0,0,0,0,0,0,0,1,
+						1,0,0,0,0,0,0,0,0,1
+					],
+				},
+				{
+					"level":12,
+					"grid": [
+						0,0,1,1,1,1,1,1,1,0,
+						0,1,1,1,1,1,1,1,1,1,
+						0,0,1,1,1,1,1,1,1,0,
+						0,0,0,1,1,1,1,1,0,0,
+						0,0,0,0,1,1,1,0,0,0,
+						0,0,0,0,0,1,0,0,0,0
+					],
+				},
+				{
+					"level":9,
+					"grid": [
+						0,0,0,0,0,0,0,0,0,0,
+						0,1,1,1,1,0,1,1,0,0,
+						0,1,1,1,0,1,1,0,1,0,
+						0,1,1,0,1,1,0,1,1,0,
+						0,1,0,1,1,0,1,1,1,0,
+						0,0,1,1,0,1,1,1,1,0
+					],
+				},
+			];
+			function gridLevel(lvl) {
+				var inc = 0;
+				$('span').css("font-weight","normal").css("text-decoration","none").css("background-color","");
+				$('.cell').css("background-image","none").removeClass('match').removeClass('monster');
+				$('.cell').attr('title','');
+				if(!lvl) {
+					$('.cell').removeClass('no-outline');
+				} else {
+					$('.grid-'+lvl).css("font-weight","bold").css("text-decoration","underline").css("background-color","rgb(43, 47, 49)");
+					$('.cell').each(function(){
+						if(!gridLevels.find(x => x.level == lvl).grid[inc]){
+							$(this).addClass('no-outline');
+						} else {
+							$(this).removeClass('no-outline');
+						}
+						inc++;
+					});
+				}
+			}
+			var selected = 0;
+			
+			$.each(monsters, function(k,v) {
+				var img = $('<img class="character" id="'+k+'">');
+				img.attr('src', v.src).attr('alt', v.name).attr('title', v.name).data( { 'island': v.islands } ).data( { 'class': v.class } );
+				$(".row.characters").append(img);
+				$('#0').addClass('selected');
+			});
+			$('.character').click(function(){
+				$('.character').removeClass('selected');
+				selected = $(this).attr('id')
+				$(this).addClass('selected');
+			});
+			$('.cell').click(function(){
+				$('.cell').removeClass('match');
+				var bg = monsters[selected].src
+				if ($(this).css("background-image") != 'none') {
+					$(this).css("background-image","none");
+					$(this).attr('title','');
+					$(this).removeClass('monster');
+				} else {
+					$(this).css("background-image",'url("'+bg+'")');
+					$(this).attr('title',monsters[selected].name);
+					$(this).addClass('monster');
+					if($('.cell[title="'+monsters[selected].name+'"]').length > 1){
+						$('.cell[title="'+$(this).attr('title')+'"]').addClass('match');
+					}
+				}
+			});
+			
+			$('#filter').on( "keyup", function(){ filterImages(); });
+			
+			function filterSearch() {
+				var search = $('#filter').val().toLowerCase();
+				if(search.length) {
+					$.each($('.character'), function(){
+						if($(this).attr('alt').toLowerCase().indexOf(search) == -1) {
+							$(this).addClass("hide");
+						}
+					});
+				}
+			};
+			
+			const islands = [];
+			$(monsters).each(function(k,monster){
+				$(monster.islands).each(function(k,island){
+					if(island != "General" && jQuery.inArray( island, islands) === -1 && island.indexOf("Mirror") === -1){
+						islands.push(island);
+					}
+				});
+			});
+			islands.sort();
+			$(islands).each(function(k,v){
+				$('#filter-island').append('<option value="'+v+'">'+v+'</option>');
+			});
+			
+			$('#filter-island').change(function(){ filterImages() });
+			
+			$('input[type=radio][name=filter-type]').change(function(){ filterImages(); });
+			
+			$('#help').click(function(){
+				$('#help-box-out').css('display','block');
+			});
+			
+			$('#help-box-out').click(function(){
+				$('#help-box-out').css('display','none');
+			});
+			
+			function filterImages() {
+				$('.character').removeClass("hide");
+				var filterClass = $('input[type=radio][name=filter-type]:checked').val();
+				var filterIsland = $('#filter-island').val();
+				$.each($('.character'), function(){
+					if(filterClass != "All" && jQuery.inArray( filterClass, $(this).data("class")) === -1) {
+						$(this).addClass("hide");
+					}
+					if(filterIsland != "All" && jQuery.inArray( filterIsland, $(this).data("island")) === -1 && jQuery.inArray( "General", $(this).data("island")) === -1) {
+						$(this).addClass("hide");
+					}
+				});
+				filterSearch();
+			};
+		</script>
+	</body>
+</html>
