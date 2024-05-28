@@ -80,11 +80,20 @@
 		.cell.monster {
 			cursor: pointer;
 		}
+		label, #filter-island, #filter {
+			vertical-align: super;
+		}
 		input[type=radio][name=filter-type] {
 			margin-right: 1em;
+			width: 2em;
+			height: 2em;
 		}
 		#filter-island {
 			margin-left: .5em;
+			height: 2em;
+		}
+		#filter {
+			height: 2em;
 		}
 		span.lvl {
 			display: inline-flex;
@@ -175,9 +184,9 @@
 				<span onclick='gridLevel(11)' class='lvl grid-11'>Diamond Md</span>
 				<span onclick='gridLevel(12)' class='lvl grid-12'>Diamond Lg</span>
 			</div><div class='row filter-grid'>
-				<p>
-					<span onclick='gridLevel(1)' class='lvl grid-1'>1</span><span onclick='gridLevel(2)' class='lvl grid-2'>2</span><span onclick='gridLevel(3)' class='lvl grid-3'>3</span><span onclick='gridLevel(4)' class='lvl grid-4'>4</span><span onclick='gridLevel(5)' class='lvl grid-5'>5</span><span onclick='gridLevel(6)' class='lvl grid-6'>6</span><span onclick='gridLevel(7)' class='lvl grid-7'>7</span><span onclick='gridLevel(8)' class='lvl grid-8'>8</span><span onclick='gridLevel(9)' class='lvl grid-9'>9</span>
-				</p>
+			<p>
+				<span onclick='gridLevel(1)' class='lvl grid-1'>1</span><span onclick='gridLevel(2)' class='lvl grid-2'>2</span><span onclick='gridLevel(3)' class='lvl grid-3'>3</span><span onclick='gridLevel(4)' class='lvl grid-4'>4</span><span onclick='gridLevel(5)' class='lvl grid-5'>5</span><span onclick='gridLevel(6)' class='lvl grid-6'>6</span><span onclick='gridLevel(7)' class='lvl grid-7'>7</span><span onclick='gridLevel(8)' class='lvl grid-8'>8</span><span onclick='gridLevel(9)' class='lvl grid-9'>9</span>
+			</p>
 			</div>
 			<div class='row'>
 				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
@@ -193,10 +202,10 @@
 				<div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div><div class='cell'></div>
 			</div>
 			<div class='row filter-types'>
-				<label for="filter-all">All</label><input type="radio" id="filter-all" name="filter-type" value="All" checked>
-				<label for="filter-common">Common</label><input type="radio" id="filter-common" name="filter-type" value="Common">
-				<label for="filter-rare">Rare</label><input type="radio" id="filter-rare" name="filter-type" value="Rare">
-				<label for="filter-epic">Epic</label><input type="radio" id="filter-epic" name="filter-type" value="Epic">
+				<label for="filter-all" class="filter-type">All</label><input type="radio" id="filter-all" name="filter-type" value="All" checked>
+				<label for="filter-common" class="filter-type">Common</label><input type="radio" id="filter-common" name="filter-type" value="Common">
+				<label for="filter-rare" class="filter-type">Rare</label><input type="radio" id="filter-rare" name="filter-type" value="Rare">
+				<label for="filter-epic" class="filter-type">Epic</label><input type="radio" id="filter-epic" name="filter-type" value="Epic">
 				<label for="filter-island">Island</label><select id="filter-island">
 					<option value="All" selected>All</option>
 				</select>
@@ -221,7 +230,7 @@
 				<span id="help-close">X</span>
 			</div>
 		</div>
-		<script src="monsters.js?<?php echo filemtime("monsters.js") ?>"></script>
+		<script src="monsters.js"></script>
 		<script>
 			var gridLevels = [
 				{

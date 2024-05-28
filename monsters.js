@@ -5319,6 +5319,83 @@ var monsters = [
 		]
 	},
 	{
+		"name": "Flasque",
+		"src": "images/Flasque_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
+		"name": "Nitebear",
+		"src": "images/Nitebear_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
+		"name": "Piplash",
+		"src": "images/Piplash_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
+		"name": "X'rt",
+		"src": "images/X%27rt_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
+		"name": "Whaill",
+		"src": "images/Whaill_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
+		"name": "Vhenshun",
+		"src": "images/Vhenshun_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
+		"name": "Pentumbra",
+		"src": "images/Pentumbra_Portrait.png",
+		"islands": [
+			"Workshop"
+		],
+		"class": [
+			"Common",
+			"Ethereal"
+		]
+	},
+	{
 		"name": "Plant",
 		"src": "images/Plant_Portrait.png",
 		"islands": [
